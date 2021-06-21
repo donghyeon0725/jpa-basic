@@ -1,13 +1,15 @@
 package helloJPA_one;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Member {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private int age;
+    @Enumerated
+    private Role role;
 
     public Long getId() {
         return id;
@@ -24,6 +26,24 @@ public class Member {
 
     public Member setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Member setAge(int age) {
+        this.age = age;
+        return this;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public Member setRole(Role role) {
+        this.role = role;
         return this;
     }
 }
