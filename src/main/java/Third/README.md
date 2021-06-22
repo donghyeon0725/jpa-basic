@@ -144,6 +144,20 @@ entityManager.clear();
     * 이때 자동으로 flush가 호출되는 이유는 JPQL의 경우 무조건 DB를 거쳐서 가져오는 데이터이기 때문이다.
     * 만약 방금 insert 된 값이 DB에 flush 되어 있지 않다면 select 할 때 값이 없을 수 있는데 이는 데이터를 신뢰할 수 없음을 의미하기 때문이다.
 
+> flush 모드 옵션
+* JPQL 을 사용할 때 굳이 Flush 를 사용하고 싶지 않으면, 이렇게 할 수 있다.
+
+```java
+entityManager.setFlushMode(FlushModeType.COMMIT);
+```
+* FlushModeType.AUTO
+    * 커밋이나 쿼리를 실행할 때 플러시 (기본값)
+* FlushModeType.COMMIT
+    * 커밋할 때만 플러시
+
+그런데 되도록 기본값을 사용하는 것이 좋다.
+그리고 이런 플래시는 컨텍스트를 비우는 것이 아니다. 컨텍스트를 비우고 싶다면 clear 를 사용해야 한다.
+
 
 
 
