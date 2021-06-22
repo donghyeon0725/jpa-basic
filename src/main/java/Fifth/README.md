@@ -280,6 +280,7 @@ public TMember changeTeam(TTeam team) {
 
 📌 실전예제
 -
+실전예제 확인하기
 > 관계도
 
 ![default](./img/3814eb8f17fd4f32951eb88c807d8288.png)

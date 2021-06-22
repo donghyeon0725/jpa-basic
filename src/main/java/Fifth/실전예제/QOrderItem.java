@@ -8,7 +8,7 @@ public class QOrderItem {
     @Id
     private Long id;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "QORDER_ID")
     private QOrder order;
 

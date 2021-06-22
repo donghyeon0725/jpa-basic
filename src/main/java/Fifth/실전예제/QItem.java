@@ -1,12 +1,11 @@
 package Fifth.실전예제;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class QItem {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class QItem extends BaseEntity {
     @Id
     private Long id;
 
