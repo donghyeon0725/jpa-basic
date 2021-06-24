@@ -1,4 +1,4 @@
-package helloJPA_one;
+package First;
 
 import javax.persistence.*;
 

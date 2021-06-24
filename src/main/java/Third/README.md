@@ -37,12 +37,12 @@
 
 > 비영속
 ```java
-Member member = new Member();
+First.Member member = new First.Member();
 ```
 
 > 영속
 ```java
-Member member = new Member();
+First.Member member = new First.Member();
 entityManager.persist(member);
 ```
 아직은 DB에 저장된 상태가 아니다.
@@ -139,7 +139,7 @@ entityManager.clear();
     ```
 * JPQL 쿼리 실행 (flush 자동 호출)
     ```text
-    List<Member> memberList = entityManager.createQuery("select m from Member as m", Member.class).getResultList();
+    List<First.Member> memberList = entityManager.createQuery("select m from First.Member as m", First.Member.class).getResultList();
     ```
     * 이때 자동으로 flush가 호출되는 이유는 JPQL의 경우 무조건 DB를 거쳐서 가져오는 데이터이기 때문이다.
     * 만약 방금 insert 된 값이 DB에 flush 되어 있지 않다면 select 할 때 값이 없을 수 있는데 이는 데이터를 신뢰할 수 없음을 의미하기 때문이다.

@@ -1,4 +1,4 @@
-package helloJPA_one;
+package First;
 
 public enum Role {
     USER, ADMIN

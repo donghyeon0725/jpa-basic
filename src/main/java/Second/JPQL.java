@@ -1,7 +1,7 @@
 package Second;
 
+import First.Member;
 import First.User;
-import helloJPA_one.Member;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

@@ -39,7 +39,7 @@
 📌 객체지향 스러운 모델링
 -
 ![default](./img/85283be279564f3bbacbe526b4df6afc.png)
-* Member 에서 Team을 가져오고, insert 할 때는 Member 에 setTeam 을 한 뒤에 Member insert 하면 끝
+* First.Member 에서 Team을 가져오고, insert 할 때는 First.Member 에 setTeam 을 한 뒤에 First.Member insert 하면 끝
 
 
 <br/>
@@ -106,7 +106,7 @@ member 에 setTeam 을 하고 저장했는데, team 데이터 또한 잘 저장 
 
 * 연관관계 탐색
 ```java
-Member member = jpa.find(Member.class, memberId);
+First.Member member = jpa.find(First.Member.class, memberId);
 Team team = member.getTeam();
 ```
 member 를 조회했고 거기서 getTeam 만 하면 team 데이터 또한 탐색할 수 있습니다.
@@ -114,8 +114,8 @@ member 를 조회했고 거기서 getTeam 만 하면 team 데이터 또한 탐�
 * 비교
 ```java
 String memberId = "100";
-Member member1 = jpa.find(Member.class, memberId);
-Member member2 = jpa.find(Member.class, memberId);
+First.Member member1 = jpa.find(First.Member.class, memberId);
+First.Member member2 = jpa.find(First.Member.class, memberId);
 
 if (member1 == member2)
     System.out.println("member1과 member2가 같습니다."); // => 출력
@@ -142,8 +142,8 @@ JPA 는 다음과 같은 성능 최적화 기법을 제공합니다.
         * 그런데 이를 애플리케이션 계층에서 허용해주는 것이다.
 ```java
 String memberId = "100";
-Member m1 = jpa.find(Member.class, memberId); // DB에 다녀옵니다. 찾은 데이터는 캐시에 저장합니다.
-Member m2 = jpa.find(Member.class, memberId); // 캐시된 데이터를 가져옵니다.
+First.Member m1 = jpa.find(First.Member.class, memberId); // DB에 다녀옵니다. 찾은 데이터는 캐시에 저장합니다.
+First.Member m2 = jpa.find(First.Member.class, memberId); // 캐시된 데이터를 가져옵니다.
 
 ...println(m1 == m2); // true
 ```
@@ -162,12 +162,12 @@ Member m2 = jpa.find(Member.class, memberId); // 캐시된 데이터를 가져�
 * [Loading.java](./Loading.java)
 ```java
 // 지연로딩
-Member member = memberDAO.find(memberId); // member select
+First.Member member = memberDAO.find(memberId); // member select
 Team team = member.getTeam();
 String teamName = team.getName();   // team select
 
 // 즉시로딩
-Member member = memberDAO.find(memberId); // member and team select (with join)
+First.Member member = memberDAO.find(memberId); // member and team select (with join)
 Team team = member.getTeam();
 String teamName = team.getName(); 
 ```

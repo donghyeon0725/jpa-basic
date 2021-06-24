@@ -32,7 +32,7 @@
 ![default](./img/896247eb980649ae86f61b97131183d0.png)
 * teamId가 아니라, team을 사용해서 객체의 연관관계를 설정했다.
 
-> Member
+> First.Member
 ```java
 @Entity
 public class TMember {
@@ -222,7 +222,7 @@ public TMember changeTeam(TTeam team) {
 ![default](./img/9aa293c2de0142048bbe3777e398dfbb.png)
 * 이는 일대다 관계 중 일인, 팀을 중심으로 무언가 해보겠다는 의도로 작성된 관계이다.
 * 물론, 이것은 매핑에 대한 설계이지, DB 설계에서는 "다"에 해당하는 Member에서 FK를 관리한다. 
-* 해야 할 일은 그저 Team 쪽에 @JoinColumn 으로 조인 컬럼을 명시해주고 Member 쪽에서 mappedBy(선택) 속성을 사용 해주면 됩니다.
+* 해야 할 일은 그저 Team 쪽에 @JoinColumn 으로 조인 컬럼을 명시해주고 First.Member 쪽에서 mappedBy(선택) 속성을 사용 해주면 됩니다.
 * 이 때, team과 member 인스턴스를 생성해서 각각 persist 한다면, member를 먼저 persist 할 것이기에 team까지 insert 한 뒤, member를 update 하는 방향으로 흘러 갈 것이다(team이 member 연관관계의 주인이기 때문에).
 * 그런데 더 큰 문제는 team을 수정했는데 member에 update 쿼리가 나간다는 점이다. 이는 개발자에게 큰 혼란을 줄 수 있다.
 * 따라서 연관관계의 주인은 기본적으로 "다" 쪽에 두도록 하자

@@ -50,7 +50,7 @@ entityTransaction.begin();
 
 try {
     // 중간에 문제가 생길 경우 rollback도 해야 합니다.
-    Member member = new Member();
+    First.Member member = new First.Member();
     member.setId(2L);
     member.setName("HelloB");
     entityManager.persist(member);
@@ -76,7 +76,7 @@ entityManagerFactory.close();
 ```java
 @Entity
 @Table(name = "USER") // USER 라는 이름의 테이블
-public class Member {
+public class First.Member {
     @Id
     private Long id;
     @Column(name = "username") // username 이라는 이름의 컬럼
@@ -90,7 +90,7 @@ public class Member {
 -
 > INSERT
 ```java
-Member member = new Member();
+First.Member member = new First.Member();
 member.setId(2L);
 member.setName("HelloB");
 entityManager.persist(member);
@@ -98,20 +98,20 @@ entityManager.persist(member);
 
 > SELECT
 ```java
-Member member = entityManager.find(Member.class, 1L);
+First.Member member = entityManager.find(First.Member.class, 1L);
 System.out.println("findManger id : " + member.getId());
 System.out.println("findManger name : " + member.getName());
 ```
 
 > DELETE
 ```java
-Member member = entityManager.find(Member.class, 1L);
+First.Member member = entityManager.find(First.Member.class, 1L);
 entityManager.remove(member);
 ```
 
 > UPDATE
 ```java
-Member member = entityManager.find(Member.class, 2L);
+First.Member member = entityManager.find(First.Member.class, 2L);
 member.setName("Hello JPA");
 ```
 * JPA 의 경우, commit 을 하는 시점에 Entity 객체에 값이 변화가 있었는지 없었는지 검사를 하기 때문에 별도 저장 없이, set 만 해도 update 쿼리가 나간다.
@@ -134,9 +134,9 @@ member.setName("Hello JPA");
 -
 * JPQL은 아래와 같이 사용
 ```java
-List<Member> memberList = entityManager.createQuery("select m from Member as m", Member.class).getResultList();
+List<First.Member> memberList = entityManager.createQuery("select m from First.Member as m", First.Member.class).getResultList();
 
-for (Member member : memberList) {
+for (First.Member member : memberList) {
     System.out.println("name : " + member.getName());
 }
 ```
@@ -147,11 +147,11 @@ Hibernate:
     /* select
         m 
     from
-        Member as m */ select
+        First.Member as m */ select
             member0_.id as id1_0_,
             member0_.name as name2_0_ 
         from
-            Member member0_
+            First.Member member0_
 name : Hello JPA
 ```
 * 위와 같은 동작을 하면 쿼리가 자동으로 나가는 것이 보인다.
@@ -162,7 +162,7 @@ name : Hello JPA
 📌 JPQL의 페이징
 -
 ```java
-List<Member> memberList = entityManager.createQuery("select m from Member as m", Member.class)
+List<First.Member> memberList = entityManager.createQuery("select m from First.Member as m", First.Member.class)
         .setFirstResult(5)
         .setMaxResults(8)
         .getResultList();
@@ -173,11 +173,11 @@ Hibernate:
     /* select
         m 
     from
-        Member as m */ select
+        First.Member as m */ select
             member0_.id as id1_0_,
             member0_.name as name2_0_ 
         from
-            Member member0_ limit ? offset ?
+            First.Member member0_ limit ? offset ?
 ```
 
 
