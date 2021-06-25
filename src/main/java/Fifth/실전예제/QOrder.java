@@ -15,10 +15,10 @@ public class QOrder {
     @JoinColumn(name = "QMEMBER_ID")
     private QMember member;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<QOrderItem> items;
 
-    @OneToOne
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private QDelivery delivery;
     private Date orderDate;
     private OrderStatus orderStatus;
