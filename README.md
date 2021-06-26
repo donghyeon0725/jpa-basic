@@ -14,4 +14,4 @@
 7. [Lazy Loading & Eager Loading 심화](./src/main/java/Seventh/README.md)
 8. [영속성 전이 & 고아 객체](./src/main/java/Eighth/README.md)
 9. [JPA 타입 분류](./src/main/java/Nine/README.md)
-10. [JPQL & 프로젝션](./src/main/java/ten/README.md)
+10. [JPQL & 프로젝션 & JPQL 페이징](./src/main/java/ten/README.md)

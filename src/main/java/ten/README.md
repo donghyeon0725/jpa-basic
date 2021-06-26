@@ -186,7 +186,169 @@
 
 
 
+<br/>
+
+📌 JPQL 페이징
+-
+* [참고](./page/Run.java)
+    * 페이징을 다음의 두 api로 추상화 되어 있어서 특정 DB에 종속적이지 않게 페이징을 할 수 있음
+    * setFirstResult(int startIndex) : 조회 시작의 위치
+    * setMaxResults(int maxResult) : 조회할 데이터의 수
+    ```text
+    Hibernate: 
+        /* SELECT
+            m 
+        from
+            LMember m */ select
+                lmember0_.id as id1_10_,
+                lmember0_.age as age2_10_,
+                lmember0_.name as name3_10_,
+                lmember0_.endDate as endDate4_10_,
+                lmember0_.startDate as startDat5_10_ 
+            from
+                LMember lmember0_ limit ? offset ?
+    멤버 3, 11
+    멤버 4, 63
+    6월 26, 2021 1:04:37 오전 org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl stop
+    INFO: HHH10001008: Cleaning up connection pool [jdbc:h2:tcp://localhost/~/test]
+    
+    Process finished with exit code 0
+    ```
+    
+<br/>
+
+📌 JPQL 조인
+-
+* 다음과 같은 세가지 조인의 종류가 존재
+    * 내부 조인
+        * select m from Member m (inner) join m.team t
+        * join 대상 테이블의 데이터가 없으면 조회되지 않음 
+    * 외부 조인
+        * select m from Member m left (outer) join m.team t
+        * join 대상 테이블의 데이터가 없으면 null 로 조회됨
+    * 세타 조인
+        * select count(m) from Member m, Team t where m.username = t.name
+        * 카르테시안 곱이라고 하는데, join 조건절을 적지 않았을 때 from 이 후의 모든 테이블 데이터를 결합해서 where 조건에 맞는 데이터만 가져옴 => 별로 좋지 않은 join
+* => 별도 조건을 적지 않아도 자동으로 id를 통해 join을 함
 
 
+<br/>
+
+📌 JPQL on 절
+-
+* DB에서 join 할 때 미리 대상의 테이블 row를 filtering 할 수 있는 기술인 on 절을 JPQL 에서도 지원합니다. (JPA 2.1 부터)
+* JPQL
+    * select m, t from Member m left join m.team t on m.name = 'A'
+* SQL 번역
+    * select m.*, t.* from Member m left join team t on m.team_id = t.id and t.name = 'A'
+    * 연관관계가 있다면 자동으로 키값으로 join
+* [참고](./on/Run.java)
+* 참고로 요즘 버전의 JPA는 연관관계가 없어도 조인 됩니다.
+
+
+
+<br/>
+
+📌 서브 쿼리
+-
+1. 나이가 평균 보다 많은 회원
+    * select m from Member m where m.age > (select avg(mm.age) from Member mm)
+    * 서브 쿼리 조건으로 사용한 mm 이 m 과 아무런 관련이 없어서 성능이 비교적 잘 나온다.
+2. 한 건이라도 주문한 고객
+    * select m from Member m where (select count(o) from Order o where m = o.member) > 0
+    * 서브 쿼리 조건으로 사용한 m 이 쿼리에서 긁어온 것이라서 성능이 잘 나오지 않는다.
+
+
+<br/>
+
+📌 서브 쿼리 지원 함수
+-
+* (not) exist + subQuery : 서브쿼리에 결과가 존재하면 참
+    * all, any, some
+* (not) in + subQuery : 서브쿼리에 결과 중 하나라도 같은 것이 있으면 참
+
+
+
+<br/>
+
+📌 서브 쿼리 지원 함수 예제
+-
+* 팀 A 소속 회원 
+    * select m from Member m where exist (select t from m.team t where t.name = '팀A')
+* 전체 상품의 각각의 재고보다 주문량이 많은 주문들
+    * select o from Order o where o.orderAmount > ALL (select p.stockAmount from Product p)
+* 어떤 팀이든 팀에 소속된 회원
+    * select m from Member m where m.team = ANY (select t from Team t)
+ 
+
+<br/>
+
+📌 서브쿼리 한계
+-
+* JPA는 where, having 절에서만 서브 쿼리 사용 가능
+* 하이버네이트는 select 에서도 지원함
+* from 절의 서브 쿼리는 현재 JPQL 에서 불가
+    * 대부분은 조인으로 풀어 사용이 가능
+
+
+
+<br/>
+
+📌 JPQL 에서 타입의 표현
+-
+* 문자
+    * 'HELLO'
+    * 'She''s' : 따옴표는 따옴표 2번으로
+* 숫자
+    * 10L(Long), 10D(Double), 10F(Float)
+* Boolean
+    * TRUE, FALSE
+* ENUM
+    * jpabook.MemberType.Admin : 패키지 명까지 포함해야함
+    * [참고](./type/Run.java)
+* 엔티티 타입 
+    * type(entity) = Member : 상속 관계인 경우 사용
+    ![default](./img/b3b4858c7234496dadcfeaf831d1dbfd.png)
+
+<br/>
     
+📌 JPQL 기타 문법
+-
+* SQL 과 문법이 같음
+* exists, in
+* and, or, not
+* =, >, <, <=, <>
+* between, like, is null
+* 조건식
+    ![default](./img/172a150682ae4eec80e6725e7ec344b2.png)
+    * 기본 case는 조건
+    * 단순 case는 equals
+    * 조건식 관련 함수
+    ![default](./img/ed9a289c9d8743a68ed9807ddeeec8b9.png)
+* JPQL 기본 함수 
+    ![default](./img/9dae61e0393641f5b5d2598f94eb2987.png)
+* Size 함수 
+    ![default](./img/128a118b594e49c99ca26e4e952e82c6.png)
+    * team과 member는 연관관계가 있는 엔티티, 컬렉션의 크기 반환
+    * select count(*) from member where team_id = ? 와 동일
+* index 함수
+    * 사용하지 않는 것을 권장
+* 사용자 정의 함수
+    ![default](./img/1cd0d825b0c94bf9afb6e2214ecb0571.png)
+    * 방언 클래스에 들어가보면 기본적으로 함수들을 전부 등록해놓은 것을 알 수 있음
+    ![default](./img/588189cf49ca4fbe9d18084786be06bd.png)
+    * 사용자 함수 사용법
+        1. 내가 사용하는 방언을 상속
+        2. 받은 방언을 생성자에 등록
+        ![default](./img/0dee7f6c1dd24f009968ada881de32e5.png)
+            * 내가 사용함 함수를 등록하는 방법은 방언 클래스를 열어서 DB 정의 함수가 어떻게 등록 되어 있는지 직접 확인을 해보면 좋다.
+        3. 설정 변경 (persistence.xml)
+        ![default](./img/6fc5d00479a5440a8416e80c9aefcda6.png)
+        4. 사용
+        ![default](./img/58084eb7ba254d8fb168b2818b0026f9.png)
+            * 하이버네이트에서는 다음과 같은 사용도 가능합니다.
+            ![default](./img/d3ea48aeb6624225a8fe18ae79a6aa7c.png)
     
+
+
+
